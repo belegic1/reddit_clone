@@ -3,13 +3,16 @@ import { createConnection } from 'typeorm';
 import express from 'express';
 import morgan from 'morgan';
 import trim from './migglewares/trim';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+dotenv.config();
 
-import { User } from './entity/User';
 import authroutes from './routes/auth';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(trim);
 
@@ -19,7 +22,8 @@ app.get('/', (_, res) => {
 
 app.use('/api/auth', authroutes);
 
-app.listen(5000, async () => {
+const port = process.env.PORT || 5000;
+app.listen(port, async () => {
   console.log('Server is listenning....');
 
   try {
