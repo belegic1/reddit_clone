@@ -1,10 +1,17 @@
-import { User } from './../entity/User';
-import { json, Request, Response, Router } from 'express';
+import User from './../entity/User';
+import { Request, Response, Router } from 'express';
 import { validate, isEmpty } from 'class-validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import auth from '../migglewares/auth';
+
+const mapErrors = (errors: Object[]) => {
+  return errors.reduce((prev: any, err: any) => {
+    prev[err.property] = Object.entries(err.constraints)[0][1];
+    return prev;
+  }, {});
+};
 
 const register = async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
@@ -24,7 +31,15 @@ const register = async (req: Request, res: Response) => {
 
     errors = await validate(user);
 
-    if (errors.length > 0) return res.status(400).json({ errors });
+    if (errors.length > 0) {
+      // let mappedErrors: any = {};
+      // errors.forEach((e: any) => {
+      //   const key = e.property;
+      //   const value = Object.entries(e.constraints)[0][1];
+      //   mappedErrors[key] = value;
+      // });
+      return res.status(400).json(mapErrors(errors));
+    }
     await user.save();
     return res.status(201).json(user);
   } catch (error) {
@@ -50,7 +65,7 @@ const login = async (req: Request, res: Response) => {
     if (!comparedPasswords)
       return res.status(401).json({ password: 'Invalid password' });
 
-    const token = await jwt.sign({ username }, process.env.JWT_SECRET);
+    const token = await jwt.sign({ username }, process.env.JWT_SECRET!);
 
     res.set(
       'Set-Cookie',
@@ -65,7 +80,7 @@ const login = async (req: Request, res: Response) => {
 
     return res.json(user);
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    return res.status(500).json({ msg: err.message });
   }
 };
 
