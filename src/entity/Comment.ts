@@ -5,11 +5,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { makeId } from '../util/healpers';
 import User from './User';
 import Entity from './Entity';
 import Post from './Post';
+import Vote from './Vote';
 
 @TOEntity('comments')
 export default class Comment extends Entity {
@@ -34,6 +36,9 @@ export default class Comment extends Entity {
 
   @ManyToOne(() => Post, (post) => post.comments, { nullable: false })
   post: Post;
+
+  @OneToMany(() => Vote, (vote) => vote.comment)
+  votes: Vote[];
 
   @BeforeInsert()
   makeId() {

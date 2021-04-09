@@ -16,6 +16,7 @@ import User from './User';
 import Sub from './Sub';
 import Comment from './Comment';
 import { Expose } from 'class-transformer';
+import Vote from './Vote';
 
 @TOEntity('posts')
 export default class Post extends Entity {
@@ -54,6 +55,9 @@ export default class Post extends Entity {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => Vote, (vote) => vote.post)
+  votes: Vote[];
 
   @Expose() get url(): string {
     return `/r/${this.subName}/${this.identifier}/${this.slug}`;
