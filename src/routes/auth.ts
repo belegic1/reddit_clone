@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import auth from '../migglewares/auth';
+import user from '../migglewares/user';
 
 const mapErrors = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
@@ -110,7 +111,7 @@ const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
-router.get('/logout', auth, logout);
-router.get('/me', auth, me);
+router.get('/logout', user, auth, logout);
+router.get('/me', user, auth, me);
 
 export default router;

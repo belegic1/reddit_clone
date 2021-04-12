@@ -11,6 +11,7 @@ dotenv.config();
 import authroutes from './routes/auth';
 import postroutes from './routes/post';
 import subroutes from './routes/sub';
+import miscroutes from './routes/misc';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.get('/', (_, res) => {
 app.use('/api/auth', authroutes);
 app.use('/api/posts', postroutes);
 app.use('/api/subs', subroutes);
+app.use('/api/misc', miscroutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, async () => {

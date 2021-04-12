@@ -3,6 +3,7 @@ import { Router, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import Sub from '../entity/Sub';
 import auth from '../migglewares/auth';
+import user from '../migglewares/user';
 
 const createSub = async (req: Request, res: Response) => {
   const { name, title, description } = req.body;
@@ -41,6 +42,6 @@ const createSub = async (req: Request, res: Response) => {
 
 const router = Router();
 
-router.post('/', auth, createSub);
+router.post('/', user, auth, createSub);
 
 export default router;

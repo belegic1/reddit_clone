@@ -2,7 +2,7 @@ import { Entity as TOEntity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 import Entity from './Entity';
 import Post from './Post';
-import User from './Entity';
+import User from './User';
 import Comment from './Comment';
 
 @TOEntity('votes')
@@ -26,5 +26,5 @@ export default class Vote extends Entity {
   post: Post;
 
   @ManyToOne(() => Comment)
-  comment: Post;
+  comment: Comment;
 }
